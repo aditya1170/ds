@@ -1,0 +1,113 @@
+import java.util.*;
+
+public class GraphTraversal10 {
+
+    // Adjacency list to store the graph
+    private Map<Integer, List<Integer>> adjList;
+
+    // Constructor to initialize the graph
+    public GraphTraversal10() {
+        adjList = new HashMap<>();
+    }
+
+    // Add an edge to the graph (undirected graph)
+    public void addEdge(int start, int end) {
+        adjList.putIfAbsent(start, new ArrayList<>());
+        adjList.putIfAbsent(end, new ArrayList<>());
+        adjList.get(start).add(end);
+        adjList.get(end).add(start);  // Remove this line for directed graph
+    }
+
+    // Depth-First Search (DFS) traversal
+    public void dfs(int start) {
+        Set<Integer> visited = new HashSet<>();
+        System.out.println("DFS Traversal starting from node " + start + ":");
+        dfsRecursive(start, visited);
+    }
+
+    // Recursive helper function for DFS
+    private void dfsRecursive(int node, Set<Integer> visited) {
+        visited.add(node);
+        System.out.print(node + " ");
+
+        // Visit all the unvisited neighbors
+        for (int neighbor : adjList.get(node)) {
+            if (!visited.contains(neighbor)) {
+                dfsRecursive(neighbor, visited);
+            }
+        }
+    }
+
+    // Breadth-First Search (BFS) traversal
+    public void bfs(int start) {
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+
+        visited.add(start);
+        queue.add(start);
+
+        System.out.println("BFS Traversal starting from node " + start + ":");
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            System.out.print(node + " ");
+
+            // Visit all the unvisited neighbors
+            for (int neighbor : adjList.get(node)) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                }
+            }
+        }
+    }
+
+    // Main method to interact with the graph and perform traversals
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        GraphTraversal10 graph = new GraphTraversal10();
+
+        while (true) {
+            System.out.println("\nGraph Traversal Operations:");
+            System.out.println("1. Add Edge");
+            System.out.println("2. Perform DFS Traversal");
+            System.out.println("3. Perform BFS Traversal");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter the start vertex: ");
+                    int start = sc.nextInt();
+                    System.out.print("Enter the end vertex: ");
+                    int end = sc.nextInt();
+                    graph.addEdge(start, end);
+                    System.out.println("Edge added between " + start + " and " + end);
+                    break;
+
+                case 2:
+                    System.out.print("Enter the start vertex for DFS: ");
+                    start = sc.nextInt();
+                    graph.dfs(start);
+                    System.out.println();
+                    break;
+
+                case 3:
+                    System.out.print("Enter the start vertex for BFS: ");
+                    start = sc.nextInt();
+                    graph.bfs(start);
+                    System.out.println();
+                    break;
+
+                case 4:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+}

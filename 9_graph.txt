@@ -1,0 +1,70 @@
+import java.util.Scanner;
+
+public class GraphAdjMatrix {
+    private int[][] adjMatrix;
+    private int[] vertices;
+    private int numVertices;
+
+    public GraphAdjMatrix(int numVertices) {
+        this.numVertices = numVertices;
+        adjMatrix = new int[numVertices][numVertices];
+        vertices = new int[numVertices];
+    }
+
+    // Add an edge (adjusting for 1-based input)
+    public void addEdge(int from, int to) {
+        adjMatrix[from - 1][to - 1] = 1;
+        adjMatrix[to - 1][from - 1] = 1; // For undirected graph, comment out for directed graph
+    }
+
+    // Print the adjacency matrix
+    public void printMatrix() {
+        System.out.println("Adjacency Matrix:");
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                System.out.print(adjMatrix[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    // Print vertices
+    public void printVertices() {
+        System.out.println("The vertices in the graph are:");
+        for (int vertex : vertices) {
+            System.out.print(vertex + "\t");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of vertices: ");
+        int numVertices = scanner.nextInt();
+        GraphAdjMatrix graph = new GraphAdjMatrix(numVertices);
+
+        System.out.println("Enter the vertices:");
+        for (int i = 0; i < numVertices; i++) {
+            graph.vertices[i] = scanner.nextInt();
+        }
+
+        System.out.print("Enter the number of edges: ");
+        int numEdges = scanner.nextInt();
+
+        System.out.println("Enter the edges (from and to) as 1-based indices:");
+        for (int i = 0; i < numEdges; i++) {
+            System.out.print("Enter from vertex: ");
+            int from = scanner.nextInt();
+            System.out.print("Enter to vertex: ");
+            int to = scanner.nextInt();
+            graph.addEdge(from, to);
+        }
+
+        System.out.println("\nOutput:");
+        graph.printVertices();
+        graph.printMatrix();
+
+        scanner.close();
+    }
+}

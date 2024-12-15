@@ -1,0 +1,250 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+class BinarySearchTree {
+    Node root;
+    int count;
+
+    public BinarySearchTree() {
+        root = null;
+        count = 0;
+    }
+
+    // Insert a new node with given data
+    public void insert(int data) {
+        root = insertRec(root, data);
+        count++;
+    }
+
+    private Node insertRec(Node root, int data) {
+        if (root == null) {
+            root = new Node(data);
+            return root;
+        }
+        if (data < root.data)
+            root.left = insertRec(root.left, data);
+        else
+            root.right = insertRec(root.right, data);
+        return root;
+    }
+
+    // Pre-order traversal
+    public void preorder() {
+        preorderRec(root);
+    }
+
+    private void preorderRec(Node root) {
+        if (root != null) {
+            System.out.print(root.data + " ");
+            preorderRec(root.left);
+            preorderRec(root.right);
+        }
+    }
+
+    // In-order traversal
+    public void inorder() {
+        inorderRec(root);
+    }
+
+    private void inorderRec(Node root) {
+        if (root != null) {
+            inorderRec(root.left);
+            System.out.print(root.data + " ");
+            inorderRec(root.right);
+        }
+    }
+
+    // Post-order traversal
+    public void postorder() {
+        postorderRec(root);
+    }
+
+    private void postorderRec(Node root) {
+        if (root != null) {
+            postorderRec(root.left);
+            postorderRec(root.right);
+            System.out.print(root.data + " ");
+        }
+    }
+
+    // Search for a node with given key
+    public Node search(int key) {
+        return searchRec(root, key);
+    }
+
+    private Node searchRec(Node root, int key) {
+        if (root == null || root.data == key)
+            return root;
+        if (key < root.data)
+            return searchRec(root.left, key);
+        return searchRec(root.right, key);
+    }
+
+    // Delete a node with given key
+    public void deleteKey(int key) {
+        root = deleteRec(root, key);
+    }
+
+    private Node deleteRec(Node root, int key) {
+        if (root == null) {
+            System.out.println("Element not present in the tree.");
+            return root;
+        }
+
+        if (key < root.data)
+            root.left = deleteRec(root.left, key);
+        else if (key > root.data)
+            root.right = deleteRec(root.right, key);
+        else {
+            // Node with only one child or no child
+            if (root.left == null) {
+                count--;
+                return root.right;
+            } else if (root.right == null) {
+                count--;
+                return root.left;
+            }
+
+            // Node with two children: Get the inorder successor (smallest in the right subtree)
+            root.data = minValue(root.right);
+
+            // Delete the inorder successor
+            root.right = deleteRec(root.right, root.data);
+        }
+
+        return root;
+    }
+
+    private int minValue(Node root) {
+        int minv = root.data;
+        while (root.left != null) {
+            minv = root.left.data;
+            root = root.left;
+        }
+        return minv;
+    }
+
+    // Find the smallest element
+    public void findSmallest() {
+        if (root == null) {
+            System.out.println("The tree is empty.");
+            return;
+        }
+        Node current = root;
+        while (current.left != null)
+            current = current.left;
+        System.out.println("Smallest node is: " + current.data);
+    }
+
+    // Find the largest element
+    public void findLargest() {
+        if (root == null) {
+            System.out.println("The tree is empty.");
+            return;
+        }
+        Node current = root;
+        while (current.right != null)
+            current = current.right;
+        System.out.println("Largest node is: " + current.data);
+    }
+
+    // Count the number of nodes
+    public void countNodes() {
+        System.out.println("Total number of nodes: " + count);
+    }
+}
+
+public class BST {
+    public static void main(String[] args) {
+        BinarySearchTree btree = new BinarySearchTree();
+        Scanner scanner = new Scanner(System.in);
+        int choice, data;
+        boolean continueInput = true;
+
+        System.out.println("=== Binary Search Tree Operations ===");
+
+        // Inserting nodes
+        while (continueInput) {
+            System.out.print("Enter a value to insert: ");
+            data = scanner.nextInt();
+            btree.insert(data);
+
+            System.out.print("Wish to enter a new node? Press 1 to add, any other key to stop: ");
+            choice = scanner.nextInt();
+            if (choice != 1)
+                continueInput = false;
+        }
+
+        // Menu-driven operations
+        while (true) {
+            System.out.println("\n\n--- Menu ---");
+            System.out.println("1. Pre-order Traversal");
+            System.out.println("2. In-order Traversal");
+            System.out.println("3. Post-order Traversal");
+            System.out.println("4. Search an Element");
+            System.out.println("5. Delete an Element");
+            System.out.println("6. Find Smallest Element");
+            System.out.println("7. Find Largest Element");
+            System.out.println("8. Count Nodes");
+            System.out.println("9. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Pre-order Traversal: ");
+                    btree.preorder();
+                    System.out.println();
+                    break;
+                case 2:
+                    System.out.print("In-order Traversal: ");
+                    btree.inorder();
+                    System.out.println();
+                    break;
+                case 3:
+                    System.out.print("Post-order Traversal: ");
+                    btree.postorder();
+                    System.out.println();
+                    break;
+                case 4:
+                    System.out.print("Enter search value: ");
+                    data = scanner.nextInt();
+                    Node result = btree.search(data);
+                    if (result != null)
+                        System.out.println("Element " + result.data + " found in the tree.");
+                    else
+                        System.out.println("Element " + data + " not found in the tree.");
+                    break;
+                case 5:
+                    System.out.print("Enter the element you wish to delete: ");
+                    data = scanner.nextInt();
+                    btree.deleteKey(data);
+                    break;
+                case 6:
+                    btree.findSmallest();
+                    break;
+                case 7:
+                    btree.findLargest();
+                    break;
+                case 8:
+                    btree.countNodes();
+                    break;
+                case 9:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+}

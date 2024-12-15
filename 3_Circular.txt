@@ -1,0 +1,78 @@
+import java.util.Scanner;
+public class CircularQueue3 {
+    private int[] queue;
+    private int front;
+    private int rear;
+    private int size;
+    public CircularQueue3(int size) {
+        this.size = size;
+        queue = new int[size];
+        front = -1;
+        rear = -1;
+    } 
+    public void enqueue(int value) {
+        if ((rear + 1) % size == front) {
+            System.out.println("Circular Queue Overflow! Cannot add " + value);
+        } else {
+            if (front == -1) front = 0;
+            rear = (rear + 1) % size;
+            queue[rear] = value;
+            System.out.println(value + " added to the circular queue.");
+        }
+    }
+ 
+    public int dequeue() {
+        if (front == -1) {
+            System.out.println("Circular Queue Underflow! No element to remove.");
+            return -1;
+        } else {
+            int value = queue[front];
+            if (front == rear) {
+                front = -1;
+                rear = -1;
+            } else {
+                front = (front + 1) % size;
+            }
+            System.out.println(value + " removed from the circular queue.");
+            return value;
+        }
+    }
+    public void display() {
+        if (front == -1) {
+            System.out.println("Circular Queue is empty!");
+        } else {
+            System.out.print("Circular Queue: ");
+            int i = front;
+            while (true) {
+                System.out.print(queue[i] + " ");
+                if (i == rear) break;
+                i = (i + 1) % size;
+            }
+            System.out.println();
+        }
+    }
+    public static void main(String[] args) {
+        System.out.println("C24111 AdityaShirsat");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the size of the circular queue: ");
+        int size = scanner.nextInt();
+        CircularQueue3 circularQueue = new CircularQueue3(size);
+ 
+        while (true) {
+            System.out.println("\nCircular Queue Operations:");
+            System.out.println("1. Enqueue");
+            System.out.println("2. Dequeue");
+            System.out.println("3. Display");
+            System.out.println("4. Exit");
+            int choice = scanner.nextInt();
+            if (choice == 4) break;
+            switch (choice) {
+                case 1 -> {
+                    System.out.print("Enter value to enqueue: ");
+                    circularQueue.enqueue(scanner.nextInt());
+                }
+                case 2 -> circularQueue.dequeue();
+                case 3 -> circularQueue.display();
+                default -> System.out.println("Invalid choice!");
+            } }
+        scanner.close();

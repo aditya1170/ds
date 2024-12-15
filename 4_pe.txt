@@ -1,0 +1,65 @@
+import java.util.Scanner;
+import java.util.Stack;
+public class PostfixEvaluation4 { 
+    // Method to evaluate postfix expression
+    public static int evaluatePostfix(String postfix) {
+        if (postfix == null || postfix.isEmpty()) {
+            throw new IllegalArgumentException("Postfix expression cannot be null or empty.");
+        } 
+        Stack<Integer> stack = new Stack<>(); 
+        for (int i = 0; i < postfix.length(); i++) {
+            char ch = postfix.charAt(i); 
+            if (Character.isDigit(ch)) {
+                stack.push(ch - '0'); // Push the digit value to stack
+            } else if ("+-*/^".indexOf(ch) != -1) { // Check if the character is a valid operator
+                if (stack.size() < 2) {
+                    throw new IllegalArgumentException("Invalid postfix expression: insufficient operands.");
+                }
+                int val2 = stack.pop();
+                int val1 = stack.pop(); 
+                switch (ch) {
+                    case '+':
+                        stack.push(val1 + val2);
+                        break;
+                    case '-':
+                        stack.push(val1 - val2);
+                        break;
+                    case '*':
+                        stack.push(val1 * val2);
+                        break;
+                    case '/':
+                        if (val2 == 0) {
+                            throw new ArithmeticException("Division by zero.");
+                        }
+                        stack.push(val1 / val2);
+                        break;
+                    case '^':
+                        stack.push((int) Math.pow(val1, val2));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unsupported operator: " + ch);
+                }
+            } else if (!Character.isWhitespace(ch)) {
+                throw new IllegalArgumentException("Invalid character in postfix expression: " + ch);
+            }
+        } 
+        if (stack.size() != 1) {
+            throw new IllegalArgumentException("Invalid postfix expression: unbalanced operators and operands.");
+        } 
+        return stack.pop(); // The final result is at the top of the stack
+    } 
+    public static void main(String[] args) {
+        System.out.println("C24111 AdityaShirsat");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a postfix expression: ");
+        String postfix = scanner.nextLine(); 
+        try {
+            System.out.println("Postfix Expression: " + postfix);
+            System.out.println("Evaluation Result: " + evaluatePostfix(postfix));
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+}

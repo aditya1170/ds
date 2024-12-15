@@ -1,0 +1,58 @@
+import java.util.Scanner;
+import java.util.Stack;
+ 
+public class InfixToPostfix4 {
+    
+    // Method to get precedence of operators
+    public static int precedence(char ch) {
+        if (ch == '+' || ch == '-') {
+            return 1;
+        } else if (ch == '*' || ch == '/') {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
+ 
+    // Method to convert infix expression to postfix
+    public static String infixToPostfix(String infix) {
+        Stack<Character> stack = new Stack<>();
+        StringBuilder postfix = new StringBuilder();
+        
+        for (int i = 0; i < infix.length(); i++) {
+            char ch = infix.charAt(i);
+            
+            if (Character.isLetterOrDigit(ch)) {
+                postfix.append(ch);
+            } else if (ch == '(') {
+                stack.push(ch);
+            } else if (ch == ')') {
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    postfix.append(stack.pop());
+                }
+                stack.pop(); // pop '('
+            } else { // operator
+                while (!stack.isEmpty() && precedence(stack.peek()) >= precedence(ch)) {
+                    postfix.append(stack.pop());
+                }
+                stack.push(ch);
+            }
+        }
+        
+        // Pop remaining operators from the stack
+        while (!stack.isEmpty()) {
+            postfix.append(stack.pop());
+        }        
+        return postfix.toString();
+    } 
+    public static void main(String[] args) {
+        System.out.println("C24111 AdityaShirsat");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter an infix expression: ");
+        String infix = scanner.nextLine();
+        System.out.println("Infix Expression: " + infix);
+        System.out.println("Postfix Expression: " + infixToPostfix(infix));
+        
+        scanner.close();
+    }
+}

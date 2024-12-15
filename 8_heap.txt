@@ -1,0 +1,147 @@
+import java.util.Scanner;
+public class Heap8 { 
+    // Array to store heap elements
+    private int[] heap;
+    private int size;
+    private int capacity;
+    // Constructor to initialize the heap
+    public Heap8(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+        heap = new int[capacity];
+    }
+    // Function to insert a new element into the heap
+    public void insert(int value) {
+        if (size == capacity) {
+            System.out.println("Heap is full, cannot insert more elements.");
+            return;
+        }
+        heap[size] = value;
+        size++; 
+        // Heapify-up to maintain heap property
+        heapifyUp(size - 1);
+    }
+    // Heapify-up function to maintain the heap property after insertion
+    private void heapifyUp(int index) {
+        while (index > 0 && heap[parent(index)] > heap[index]) {
+            swap(index, parent(index));
+            index = parent(index);
+        }
+    } 
+    // Function to remove and return the root (min or max) of the heap
+    public int remove() {
+        if (size == 0) {
+            System.out.println("Heap is empty, cannot remove elements.");
+            return -1;
+        }
+        int root = heap[0];
+        heap[0] = heap[size - 1];
+        size--;
+        // Heapify-down to maintain the heap property after removal
+        heapifyDown(0);
+        return root;
+    }
+    // Heapify-down function to maintain the heap property after removal
+    private void heapifyDown(int index) {
+        int left = leftChild(index);
+        int right = rightChild(index);
+        int smallest = index;
+ 
+        // Find the smallest among the node and its children
+        if (left < size && heap[left] < heap[smallest]) {
+            smallest = left;
+        }
+        if (right < size && heap[right] < heap[smallest]) {
+            smallest = right;
+        }
+ 
+        // If the smallest is not the current node, swap and continue heapifying down
+        if (smallest != index) {
+            swap(index, smallest);
+            heapifyDown(smallest);
+        }
+    }
+    // Function to peek the root (min or max) of the heap
+    public int peek() {
+        if (size == 0) {
+            System.out.println("Heap is empty.");
+            return -1;
+        }
+        return heap[0];
+   }
+    // Function to get the parent of a node
+    private int parent(int index) {
+        return (index - 1) / 2;
+    }
+    // Function to get the left child of a node
+    private int leftChild(int index) {
+        return 2 * index + 1;
+    }
+    // Function to get the right child of a node
+    private int rightChild(int index) {
+        return 2 * index + 2;
+    }
+ 
+    // Swap function to swap two elements in the heap
+    private void swap(int i, int j) {
+        int temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
+    }
+ 
+    // Function to display the heap
+    public void display() {
+        for (int i = 0; i < size; i++) {
+            System.out.print(heap[i] + " ");
+        }
+        System.out.println();
+    }
+    // Main method to interact with the heap
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the capacity of the heap:");
+        int capacity = sc.nextInt(); 
+        Heap8 heap = new Heap8(capacity); 
+        while (true) {
+            System.out.println("\nHeap Operations:");
+            System.out.println("1. Insert");
+            System.out.println("2. Remove (Root)");
+            System.out.println("3. Peek (Root)");
+            System.out.println("4. Display Heap");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter value to insert: ");
+                    int value = sc.nextInt();
+                    heap.insert(value);
+                    System.out.println("Inserted " + value + " into the heap.");
+                    break;
+                case 2:
+                    int removed = heap.remove();
+                    if (removed != -1) {
+                        System.out.println("Removed root value: " + removed);
+                    }
+                    break; 
+                case 3:
+                    int peekValue = heap.peek();
+                    if (peekValue != -1) {
+                        System.out.println("Root value: " + peekValue);
+                    }
+                    break;
+                 case 4:
+                    System.out.println("Heap Elements: ");
+                    heap.display();
+                    break 
+                case 5:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+ 
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+}

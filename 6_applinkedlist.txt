@@ -1,0 +1,339 @@
+import java.util.Scanner; 
+public class LinkedListApplications6 { 
+    // Sparse Matrix using Linked List
+    static class SparseMatrix {
+        class Node {
+            int row, col, value;
+            Node next;            
+            Node(int row, int col, int value) {
+                this.row = row;
+                this.col = col;
+                this.value = value;
+                this.next = null;
+            }
+        }        
+        Node head; 
+        // Add a non-zero element to the sparse matrix
+        public void addElement(int row, int col, int value) {
+            if (value == 0) return; // No need to store zeroes            
+            Node newNode = new Node(row, col, value);
+            if (head == null) {
+                head = newNode;
+            } else {
+                Node temp = head;
+                while (temp.next != null) {
+                    temp = temp.next;
+                }
+                temp.next = newNode;
+            }
+        }
+        // Display Sparse Matrix
+        public void display() {
+            Node temp = head;
+            while (temp != null) {
+                System.out.println("Row: " + temp.row + ", Col: " + temp.col + ", Value: " + temp.value);
+                temp = temp.next;
+            }
+        }
+    }
+ 
+    // Stack using Linked List
+    static class Stack {
+        private Node top; 
+        class Node {
+            int data;
+            Node next;          
+            Node(int data) {
+                this.data = data;
+                this.next = null;
+            }
+        } 
+        public Stack() {
+            top = null;
+        } 
+        // Push data onto the stack
+        public void push(int data) {
+            Node newNode = new Node(data);
+            newNode.next = top;
+            top = newNode;
+        } 
+        // Pop data from the stack
+        public int pop() {
+            if (top == null) {
+                System.out.println("Stack is empty.");
+                return -1;
+            }
+            int data = top.data;
+            top = top.next;
+            return data;
+        } 
+        // Display stack
+        public void display() {
+            Node temp = top;
+            while (temp != null) {
+                System.out.print(temp.data + " ");
+                temp = temp.next;
+            }
+            System.out.println();
+        }
+    } 
+    // Queue using Linked List
+    static class Queue {
+        private Node front, rear; 
+        class Node {
+            int data;
+            Node next;            
+            Node(int data) {
+                this.data = data;
+                this.next = null;
+            }
+        } 
+        public Queue() {
+            front = rear = null;
+        }
+ 
+        // Enqueue data into the queue
+        public void enqueue(int data) {
+            Node newNode = new Node(data);
+            if (rear == null) {
+                front = rear = newNode;
+                return;
+            }
+            rear.next = newNode;
+            rear = newNode;
+        }
+        // Dequeue data from the queue
+        public int dequeue() {
+            if (front == null) {
+                System.out.println("Queue is empty.");
+                return -1;
+            }
+            int data = front.data;
+            front = front.next;
+            if (front == null) {
+                rear = null;
+            }
+            return data;
+        } 
+        // Display the queue
+        public void display() {
+            Node temp = front;
+            while (temp != null) {
+                System.out.print(temp.data + " ");
+                temp = temp.next;
+            }
+            System.out.println();
+        }
+    } 
+    // Priority Queue using Linked List
+    static class PriorityQueue {
+        private Node head; 
+        class Node {
+            int data;
+            int priority;
+            Node next;
+            Node(int data, int priority) {
+                this.data = data;
+                this.priority = priority;
+                this.next = null;
+            }
+        }
+        // Insert element in the priority queue
+        public void insert(int data, int priority) {
+            Node newNode = new Node(data, priority);
+            if (head == null || head.priority > priority) {
+                newNode.next = head;
+                head = newNode;
+            } else {
+                Node temp = head;
+                while (temp.next != null && temp.next.priority <= priority) {
+                    temp = temp.next;
+                }
+                newNode.next = temp.next;
+                temp.next = newNode;
+            }        } 
+        // Remove the element with the highest priority
+        public int remove() {
+            if (head == null) {
+                System.out.println("Priority Queue is empty.");
+                return -1;
+            }
+            int data = head.data;
+            head = head.next;
+            return data;
+        } 
+        // Display the priority queue
+        public void display() {
+            Node temp = head;
+            while (temp != null) {
+                System.out.print("Data: " + temp.data + " (Priority: " + temp.priority + ") ");
+                temp = temp.next;
+            }
+            System.out.println();
+        }
+    } 
+    // Double-ended Queue (Deque) using Linked List
+    static class Deque {
+        private Node front, rear; 
+        class Node {
+            int data;
+            Node next, prev;            
+            Node(int data) {
+                this.data = data;
+                this.next = this.prev = null;
+            }
+        } 
+        public Deque() {
+            front = rear = null;
+        } 
+        // Insert at front
+        public void insertFront(int data) {
+            Node newNode = new Node(data);
+            if (front == null) {
+                front = rear = newNode;
+                return;
+            }
+            newNode.next = front;
+            front.prev = newNode;
+            front = newNode;
+        } 
+        // Insert at rear
+        public void insertRear(int data) {
+            Node newNode = new Node(data);
+            if (rear == null) {
+                front = rear = newNode;
+                return;
+            }
+            newNode.prev = rear;
+            rear.next = newNode;
+            rear = newNode;
+        }
+        // Remove from front
+        public int removeFront() {
+            if (front == null) {
+                System.out.println("Deque is empty.");
+                return -1;
+            }
+            int data = front.data;
+            front = front.next;
+            if (front != null) front.prev = null;
+            return data;
+        } 
+        // Remove from rear
+        public int removeRear() {
+            if (rear == null) {
+                System.out.println("Deque is empty.");
+                return -1;
+            }
+            int data = rear.data;
+            rear = rear.prev;
+            if (rear != null) rear.next = null;
+            return data;
+        } 
+        // Display the deque
+        public void display() {
+            Node temp = front;
+            while (temp != null) {
+                System.out.print(temp.data + " ");
+                temp = temp.next;
+            }
+            System.out.println();
+        }
+    } 
+    public static void main(String[] args) {
+        System.out.println("C24111 AdityaShirsat");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Select the operation:");
+        System.out.println("1. Sparse Matrix");
+        System.out.println("2. Stack");
+        System.out.println("3. Queue");
+        System.out.println("4. Priority Queue");
+        System.out.println("5. Double-ended Queue (Deque)"); 
+        int choice = sc.nextInt(); 
+        switch (choice) {
+            case 1: {
+                SparseMatrix matrix = new SparseMatrix();
+                System.out.println("Enter number of elements for Sparse Matrix:");
+                int n = sc.nextInt();
+                for (int i = 0; i < n; i++) {
+                    System.out.println("Enter row, column, and value for element " + (i + 1) + ":");
+                    int row = sc.nextInt();
+                    int col = sc.nextInt();
+                    int value = sc.nextInt();
+                    matrix.addElement(row, col, value);
+                }
+                System.out.println("Sparse Matrix elements:");
+                matrix.display();
+                break;
+            } 
+            case 2: {
+                Stack stack = new Stack();
+                System.out.println("Enter number of elements to push to the stack:");
+                int n = sc.nextInt();
+                for (int i = 0; i < n; i++) {
+                    System.out.println("Enter data for element " + (i + 1) + ":");
+                    int data = sc.nextInt();
+                    stack.push(data);
+                }
+                System.out.println("Stack elements:");
+                stack.display();
+                System.out.println("Popped: " + stack.pop());
+                stack.display();
+                break;
+            }
+            case 3: {
+                Queue queue = new Queue();
+                System.out.println("Enter number of elements to enqueue:");
+                int n = sc.nextInt();
+                for (int i = 0; i < n; i++) {
+                    System.out.println("Enter data for element " + (i + 1) + ":");
+                    int data = sc.nextInt();
+                    queue.enqueue(data);
+                }
+                System.out.println("Queue elements:");
+                queue.display();
+                System.out.println("Dequeued: " + queue.dequeue());
+                queue.display();
+                break;
+            }
+            case 4: {
+                PriorityQueue pq = new PriorityQueue();
+                System.out.println("Enter number of elements for Priority Queue:");
+                int n = sc.nextInt();
+                for (int i = 0; i < n; i++) {
+                    System.out.println("Enter data and priority for element " + (i + 1) + ":");
+                    int data = sc.nextInt();
+                    int priority = sc.nextInt();
+                    pq.insert(data, priority);
+                }
+                System.out.println("Priority Queue elements:");
+                pq.display();
+                System.out.println("Removed: " + pq.remove());
+                pq.display();
+                break;
+            }
+            case 5: {
+                Deque deque = new Deque();
+                System.out.println("Enter number of elements for Deque:");
+                int n = sc.nextInt();
+                for (int i = 0; i < n; i++) {
+                    System.out.println("Enter data for front insertion (1) or rear insertion (2):");
+                    int data = sc.nextInt();
+                    int position = sc.nextInt();
+                    if (position == 1) deque.insertFront(data);
+                    else deque.insertRear(data);
+                }
+                System.out.println("Deque elements:");
+                deque.display();
+                System.out.println("Removed from front: " + deque.removeFront());
+                System.out.println("Removed from rear: " + deque.removeRear());
+                deque.display();
+                break;
+            }
+            default:
+                System.out.println("Invalid choice.");
+                break;
+        }        
+        sc.close();
+    }
+}
